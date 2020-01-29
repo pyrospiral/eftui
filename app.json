@@ -1,0 +1,38 @@
+{
+  "api": {
+    "api/base/result.json": "Result of ftriage on apic",
+    "api/base/status.json": "Status of ftriage on apic",
+    "api/base/start.json": "Start ftriage on apic",
+    "api/base/cancel.json": "Abort ftriage task",
+    "api/client/register.json": "Register sites on apic",
+    "api/client/update_msite.json": "Updates MSO IP address",
+    "api/misc/help.json": "Test client interaction",
+    "api/dev/log.json": "Get app logs",
+    "api/dev/health.json": "Get app health",
+    "api/dev/restart.json": "Restart the webserver"
+  },
+  "apicversion": "4.1(2m)",
+  "appid": "enhancedftriage",
+  "author": "Kushagra Chauhan, Sunil Narasimhamurthy",
+  "category": ["Visibility and Monitoring"],
+  "contact": {
+    "contact-email": "ins-ftriage-dev@external.cisco.com",
+    "contact-phone": "123-4567890",
+    "contact-url": "http://www.cisco.com/go/aci"
+  },
+  "iconfile": "icon.png",
+  "metaversion": "1.1",
+  "name": "Enhanced Ftriage",
+  "permissions": ["admin"],
+  "platforms": {
+    "apic": {
+      "hostversion": "4.1(2m)"
+    }
+  },
+  "permissionslevel": "write",
+  "shortdescr": "This application provides REST endpoints for ftriage.",
+  "vendor": "Cisco",
+  "vendordomain": "Cisco",
+  "clustermanager": "kron",
+  "version": "0.18"
+}

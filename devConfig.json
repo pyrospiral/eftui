@@ -1,0 +1,13 @@
+{
+  "backend": {
+    "prot": "http://",
+    "ip": "localhost",
+    "port": "8090"
+  },
+  "apic": {
+    "prot": "https://",
+    "ip": "10.23.239.62",
+    "username": "admin",
+    "password": "ins3965!"
+  }
+}

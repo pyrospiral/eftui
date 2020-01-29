@@ -1,0 +1,393 @@
+
+// -----------------------------------------------------------------------------
+// Absolute Center
+
+@mixin absolute-center {
+    z-index: 10 !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%,-50%) !important;
+}
+
+@mixin build-background-style(
+    $bg:                        var(--cui-background-color),
+    $color:                     var(--cui-font-color),
+    $link-color:                var(--cui-link-color),
+    $link-color-hover:          var(--cui-link-color-active),
+    $link-decoration:           underline,
+    $link-decoration-active:    underline)
+{
+    background-color: $bg;
+    color: $color;
+
+    a {
+        color: $link-color;
+        text-decoration: $link-decoration;
+
+        &:hover {
+            color: $link-color-hover;
+        }
+        &:active, &:hover, &:focus {
+            text-decoration: $link-decoration-active;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Clearfix
+
+@mixin clearfix {
+    &:after {
+        clear: both !important;
+        content: "" !important;
+        display: table !important;
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+// Deprecated
+
+@mixin deprecated($msg) {
+    @include pseudo-element;
+    content: $msg;
+    display: flex;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+
+// -----------------------------------------------------------------------------
+// Disabled
+
+@mixin disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
+}
+
+
+// -----------------------------------------------------------------------------
+// Display Mixins
+
+@mixin display-size-0 {
+    font-weight: var(--cui-headings-line-height);
+    font-size: $cui-display-size-0 !important;
+}
+@mixin display-size-1 {
+    font-weight: var(--cui-headings-line-height);
+    font-size: $cui-display-size-1 !important;
+}
+@mixin display-size-2 {
+    font-weight: var(--cui-headings-line-height);
+    font-size: $cui-display-size-2 !important;
+}
+@mixin display-size-3 {
+    font-weight: var(--cui-headings-line-height);
+    font-size: $cui-display-size-3 !important;
+}
+@mixin display-size-4 {
+    font-weight: var(--cui-headings-line-height);
+    font-size: $cui-display-size-4 !important;
+}
+
+
+// -----------------------------------------------------------------------------
+// Form Mixins
+
+@mixin cui-form-input-behavior {
+    input, select, textarea {
+        transition: all .5s ease;
+        &:hover, &.hover, &:focus, &.focus {
+            border-color: var(--cui-accent-color);
+            ~ button.link {
+                color: var(--cui-accent-color);
+            }
+        }
+        &:focus, &.focus {
+            @include cui-focus-outline;
+        }
+        &.disabled, &[disabled] {
+            ~ label {
+                @include disabled;
+            }
+        }
+    }
+}
+
+@mixin cui-form-input-error {
+    input, select, textarea {
+        border-color: var(--cui-theme-danger);
+
+        &:hover, &.hover, &:focus, .focus {
+            border-color: var(--cui-theme-danger);
+            ~ button.link {
+                color: var(--cui-theme-danger);
+            }
+        }
+        &:focus, .focus {
+            @include cui-focus-outline(var(--cui-theme-danger-rgb));
+        }
+    }
+}
+
+@mixin cui-form-input-size {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    input {
+        width: 100%;
+    }
+    input, select {
+        height: var(--cui-form-size);
+        max-height: var(--cui-form-size);
+        line-height: 24px;
+    }
+    input, select, textarea {
+        min-height: var(--cui-form-size);
+        padding: var(--cui-form-padding);
+    }
+    select {
+        padding: 0 var(--cui-spacing-dbl) 0 var(--cui-form-padding);
+    }
+    label {
+        @include cui-form-label;
+        margin-bottom: var(--cui-form-label-spacing);
+    }
+    &:after {
+        bottom: var(--cui-form-icon-yoffset);
+    }
+}
+
+@mixin cui-form-input-style {
+    input, select, textarea {
+        font-weight: var(--cui-form-value-font-weight);
+        color: var(--cui-form-value-color);
+        flex: 1;
+        flex-shrink: 0;
+        order: 3;
+        background: var(--cui-form-background);
+        border: var(--cui-border);
+        border-radius: var(--cui-border-radius);
+        box-shadow: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+    }
+}
+
+@mixin cui-form-label {
+    color: var(--cui-form-label-color);
+    font-size: var(--cui-form-label-font-size);
+    font-weight: var(--cui-form-label-font-weight);
+    text-transform: var(--cui-form-label-transform);
+}
+
+
+// -----------------------------------------------------------------------------
+// Readonly
+
+@mixin readonly {
+    opacity: 0.5;
+    cursor: not-allowed;
+    z-index: 0;
+}
+
+// -----------------------------------------------------------------------------
+// Full Page
+
+@mixin full-page {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.full-page {
+    @include full-page;
+}
+
+
+// -----------------------------------------------------------------------------
+// Lists
+
+@mixin list-unstyled {
+    list-style: none;
+}
+
+@mixin list-inline {
+    display: inline-flex;
+    flex-wrap: nowrap;
+
+    li {
+        &:last-child {
+            padding-right: 0;
+        }
+        + li {
+            margin: 0 0 0 -1px;
+        }
+    }
+}
+
+// For inline lists only
+@mixin list-divider {
+    li:after {
+        @include vertical-divider;
+    }
+    li:last-child:after {
+        content: '';
+        margin: 0;
+    }
+}
+
+
+// -----------------------------------------------------------------------------
+// Sections
+
+@mixin section-padding($padding: var(--cui-spacing)) {
+  padding: $padding 0;
+}
+
+
+// -----------------------------------------------------------------------------
+// Text Ellipsis
+
+@mixin text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@mixin text-noellipsis {
+    white-space: normal;
+}
+
+
+// -----------------------------------------------------------------------------
+// Text No Select
+
+@mixin text-noselect {
+    user-select: none !important;
+}
+
+
+// -----------------------------------------------------------------------------
+// Break Words
+
+@mixin text-break {
+    word-wrap: break-word !important;
+    word-break: break-all !important;
+}
+
+@mixin text-break-word {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+}
+
+
+// -----------------------------------------------------------------------------
+// Monospace
+
+@mixin text-monospace {
+    font-family: var(--cui-font-mono-stack) !important;
+}
+
+
+// -----------------------------------------------------------------------------
+// Hide an element. Can be used by pseudo selectors for styling
+
+@mixin pseudo-element {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    content: '';
+}
+
+
+// -----------------------------------------------------------------------------
+// Hide an element. Can be used by pseudo selectors for styling
+
+@mixin hidden-element {
+    @include pseudo-element;
+    pointer-events: none;
+    opacity: 0;
+}
+
+
+// -----------------------------------------------------------------------------
+// Hide input field. Used by checkboxes, radios, and switches to hide the ugly
+// browser default input types
+
+@mixin hidden-input {
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+}
+
+
+// -----------------------------------------------------------------------------
+// Includes the styles for the focus outline required for accessibility
+
+@mixin cui-focus-outline($color: var(--cui-focus-color)) {
+    box-shadow: 0 0 0 var(--cui-focus-thickness) rgba($color, var(--cui-focus-opacity));
+    opacity: 1;
+    outline: var(--cui-focus-thickness) transparent;
+    outline-offset: 1px;
+    outline-width: thin;
+    outline-style: none;
+}
+
+@mixin vertical-divider($margin: 0 var(--cui-spacing-qtr)) {
+    color: var(--cui-border-color);
+    content: '|';
+    margin: $margin;
+    padding: 0;
+}
+
+.divider--vertical {
+    > :after {
+        @include vertical-divider;
+    }
+}
+
+@mixin table-wrap {
+    tr, td, th {
+        white-space: normal;
+        overflow: visible;
+    }
+}
+
+
+
+// -----------------------------------------------------------------------------
+// Motion mixins
+
+@mixin transition-all {
+    transition: all .25s ease;
+}
+
+@mixin drawer-closed() {
+    //@include icon-chevron-down;
+    transform: rotate(0);
+    transition: transform .4s ease;
+}
+
+@mixin drawer-opened() {
+    transform: rotate(180deg);
+    transition: transform .4s ease;
+}

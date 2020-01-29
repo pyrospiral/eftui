@@ -1,0 +1,274 @@
+// =============================================================================
+// Cisco Brand UI Kit Variables
+//
+// These variables are used just for building the kit. All runtime properties
+// are stored in the theme file as custom CSS variables.
+// -----------------------------------------------------------------------------
+
+$cui-resource-path: ".." !default;
+
+// Grid. We use Bootstrap to generate our custom grid. The grid variables below
+// are used in the Bootstrap mixins to generate the grid.
+$cui-grid-columns: 12 !default;
+$cui-grid-gutters: 20px !default;
+$cui-grid-breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+   2xl: 1440px,
+   3xl: 1600px,
+   4xl: 1840px,
+   5xl: 2100px
+) !default;
+$cui-container-max-widths: (
+    sm: 540px,
+    md: 720px,
+    lg: 992px,
+    xl: 1440px,
+   2xl: 2560px,
+   3xl: 2560px,
+   4xl: 2560px,
+   5xl: 2560px
+) !default;
+$cui-grid-advanced-rows: 12 !default;
+$cui-grid-advanced-cell-width: 275px !default;
+$cui-grid-advanced-gutters: var(--cui-spacing-qtr) !default;
+
+// Headings
+$cui-headings: (
+    ( 'h1', 40px, 100 ), // name, font size, font weight
+    ( 'h2', 32px, 200 ),
+    ( 'h3', 28px, 200 ),
+    ( 'h4', 24px, 300 ),
+    ( 'h5', 20px, 300 ),
+    ( 'h6', 16px, 300 )
+) !default;
+
+// Large text display sizes
+$cui-display-size-0: 8rem !default;
+$cui-display-size-1: 6rem !default;
+$cui-display-size-2: 5.5rem !default;
+$cui-display-size-3: 4.5rem !default;
+$cui-display-size-4: 3.5rem !default;
+
+// Common text and icon sizes
+$cui-common-sizes: () !default;
+$cui-common-sizes: map-merge((
+    "size-10": 10px,
+    "size-12": 12px,
+    "size-14": 14px,
+    "size-16": 16px,
+    "size-18": 18px,
+    "size-20": 20px,
+    "size-24": 24px,
+    "size-28": 28px,
+    "size-32": 32px,
+    "size-36": 36px,
+    "size-48": 48px,
+    "size-64": 64px,
+    "size-96": 96px,
+    "size-128": 128px
+), $cui-common-sizes);
+
+// Grayscale colors
+$cui-gray-colors: () !default;
+$cui-gray-colors: map-merge((
+    "white": var(--cui-color-white),
+    "100":   var(--cui-color-gray-100),
+    "200":   var(--cui-color-gray-200),
+    "300":   var(--cui-color-gray-300),
+    "400":   var(--cui-color-gray-400),
+    "500":   var(--cui-color-gray-500),
+    "600":   var(--cui-color-gray-600),
+    "700":   var(--cui-color-gray-700),
+    "800":   var(--cui-color-gray-800),
+    "900":   var(--cui-color-gray-900),
+    "black": var(--cui-color-black)
+), $cui-gray-colors);
+
+// Brand colors
+$cui-brand-colors: () !default;
+$cui-brand-colors: map-merge((
+    "sky":          var(--cui-color-sky),
+    "midnight":     var(--cui-color-midnight),
+    "ocean":        var(--cui-color-ocean),
+    "green":        var(--cui-color-success),
+    "orange":       var(--cui-color-warning),
+    "red":          var(--cui-color-danger)
+), $cui-brand-colors);
+
+// Status colors
+$cui-status-colors: () !default;
+$cui-status-colors: map-merge((
+    "success":      var(--cui-theme-success),
+    "info":         var(--cui-theme-info),
+    "warning-alt":  var(--cui-theme-warning-alt),
+    "warning":      var(--cui-theme-warning),
+    "danger":       var(--cui-theme-danger)
+), $cui-status-colors);
+
+// Status colors (RGB)
+$cui-status-colors-rgb: () !default;
+$cui-status-colors-rgb: map-merge((
+    "success":      var(--cui-theme-success-rgb),
+    "info":         var(--cui-theme-info-rgb),
+    "warning-alt":  var(--cui-theme-warning-alt-rgb),
+    "warning":      var(--cui-theme-warning-rgb),
+    "danger":       var(--cui-theme-danger-rgb)
+), $cui-status-colors-rgb);
+
+// Theme colors
+$cui-theme-colors: () !default;
+$cui-theme-colors: map-merge((
+    primary:      var(--cui-theme-primary),
+    secondary:    var(--cui-theme-secondary),
+    tertiary:     var(--cui-theme-tertiary),
+    success:      var(--cui-theme-success),
+    info:         var(--cui-theme-info),
+    warning-alt:  var(--cui-theme-warning-alt),
+    warning:      var(--cui-theme-warning),
+    danger:       var(--cui-theme-danger),
+    dark:         var(--cui-theme-dark),
+    light:        var(--cui-theme-light)
+), $cui-theme-colors);
+
+// Misc colors
+$cui-misc-colors: () !default;
+$cui-misc-colors: map-merge((
+    "link":        var(--cui-link-color)
+), $cui-misc-colors);
+
+// -----------------------------------------------------------------------------
+// Badge
+
+$cui-badge-sizes: () !default;
+$cui-badge-sizes: map-merge((
+    'dot': (
+        'size': 12px,
+        'font-size': 0
+    ),
+    'tiny': (
+        'size': 14px,
+        'font-size': 9px
+    ),
+    'small': (
+        'size': 16px,
+        'font-size': var(--cui-font-size-xs)
+    ),
+    'medium': (
+        'size': var(--cui-badge-default-size),
+        'font-size': var(--cui-badge-default-font-size)
+    ),
+    'large': (
+        'size': 24px,
+        'font-size': var(--cui-font-size)
+    )
+), $cui-badge-sizes);
+
+// -----------------------------------------------------------------------------
+// Button
+
+$cui-button-colors: primary, secondary, success, dark !default;
+$cui-button-sizes: () !default;
+$cui-button-sizes: map-merge((
+    'small': (
+        'height': 22px,
+        'padding': 15px,
+        'font-size': var(--cui-font-size-sm)
+    ),
+    'default': (
+        'height': 28px,
+        'padding': 25px,
+        'font-size': var(--cui-font-size)
+    ),
+    'large': (
+        'height': 38px,
+        'padding': 40px,
+        'font-size': var(--cui-font-size-lg)
+    )
+), $cui-button-sizes);
+
+// -----------------------------------------------------------------------------
+// Footer
+
+$cui-footer-colors: primary, secondary, tertiary, dark, light !default;
+
+// -----------------------------------------------------------------------------
+// Gauge
+
+$cui-gauge-sizes: () !default;
+$cui-gauge-sizes: map-merge((
+    'small': (
+        'size': 50px,
+        'font-size': 1.5rem,
+        'font-weight': 200,
+        'circle-thickness': 6
+    ),
+    'default': (
+        'size': 100px,
+        'font-size': 3rem,
+        'font-weight': 200,
+        'circle-thickness': 6
+    ),
+    'large': (
+        'size': 150px,
+        'font-size': 6rem,
+        'font-weight': 100,
+        'circle-thickness': 6
+    )
+), $cui-gauge-sizes);
+
+// -----------------------------------------------------------------------------
+// Label
+
+$cui-label-sizes: () !default;
+$cui-label-sizes: map-merge((
+    'tiny': (
+        'height': var(--cui-label-tiny-height),
+        'padding': var(--cui-label-tiny-padding),
+        'font-size': var(--cui-label-tiny-font-size)
+    ),
+    'small': (
+        'height': var(--cui-label-small-height),
+        'padding': var(--cui-label-small-padding),
+        'font-size': var(--cui-label-small-font-size)
+    ),
+    'default': (
+        'height': var(--cui-label-default-height),
+        'padding': var(--cui-label-default-padding),
+        'font-size': var(--cui-label-default-font-size)
+    ),
+    'large': (
+        'height': var(--cui-label-large-height),
+        'padding': var(--cui-label-large-padding),
+        'font-size': var(--cui-label-large-font-size)
+    )
+), $cui-label-sizes);
+
+// -----------------------------------------------------------------------------
+// Loader
+
+$cui-loader-sizes: () !default;
+$cui-loader-sizes: map-merge((
+    'small': (
+        'size': 32px
+    ),
+    'default': (
+        'size': 64px
+    ),
+    'large': (
+        'size': 128px
+    )
+), $cui-loader-sizes);
+
+// -----------------------------------------------------------------------------
+// Sidebar
+
+$cui-sidebar-colors: primary, secondary, tertiary, dark, light !default;
+
+// -----------------------------------------------------------------------------
+// Step
+
+$cui-step-colors: primary, secondary, success, dark, light !default;

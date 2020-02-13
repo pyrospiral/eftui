@@ -78,8 +78,8 @@ if (IS_DEVELOPMENT) {
   env = {
     ...env,
     endpointConfig: {
-      BASE_URI: "/backendProxy",
-      BASE_NATIVE_URI: "/apicProxy",
+      BASE_URI: "/appcenter/Cisco/" + appJson.appid + "/", // for backend query
+      BASE_NATIVE_URI: "/api", // for apic query
       USERNAME: devConfig.apic.username,
       PASSWORD: devConfig.apic.password
     }
@@ -93,6 +93,46 @@ fs.writeFileSync(
   { flag: "w+" }
 );
 
+const proxyConfig = {
+  changeOrigin: true,
+  secure: false,
+  logLevel: "debug"
+};
+
+const devServer = {
+  port: 8080,
+  hot: true,
+  open: true, // open browser
+  historyApiFallback: true,
+  proxy: {
+    [env.endpointConfig.BASE_URI]: Object.assign({}, proxyConfig, {
+      target:
+        devConfig.backend.prot +
+        devConfig.backend.ip +
+        ":" +
+        devConfig.backend.port
+    }),
+    [env.endpointConfig.BASE_NATIVE_URI]: Object.assign({}, proxyConfig, {
+      target: devConfig.apic.prot + devConfig.apic.ip
+    })
+  }
+};
+
+const devServer2 = {
+  stats: "minimal",
+  overlay: true,
+  historyApiFallback: true,
+  disableHostCheck: true,
+  port: 8000,
+  https: false,
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+    "Access-Control-Allow-Headers":
+      "X-Requested-With, content-type, Authorization"
+  }
+};
+
 module.exports = {
   mode: "development",
   target: "web",
@@ -103,14 +143,7 @@ module.exports = {
     publicPath: "/",
     filename: "bundle.js"
   },
-  devServer: {
-    stats: "minimal",
-    overlay: true,
-    historyApiFallback: true,
-    disableHostCheck: true,
-    headers: { "Access-Control-Allow-Origin": "*" },
-    https: false
-  },
+  devServer,
   plugins: [
     new HtmlWebpackPlugin({
       template: "src/index.html",

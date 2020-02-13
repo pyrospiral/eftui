@@ -8,9 +8,6 @@ const Navigation = () => {
       <div className="container-fluid">
         <div className="header-panels">
           <div className="header-panel header-panel--left hidden-md-down">
-            <a href="../index.html" className="header-item" title="UI Kit Home">
-              <span className="icon-home"></span>
-            </a>
             <NavLink
               className="header-item"
               to="/"

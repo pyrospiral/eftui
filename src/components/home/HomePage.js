@@ -1,5 +1,5 @@
 import React from "react";
-import api from "../common/api";
+import Endpoint from "../api/endpoint";
 import FlowEntry from "./FlowEntry";
 import StartButton from "./StartButton";
 import ResultPane from "./ResultPane";
@@ -13,19 +13,20 @@ class HomePage extends React.Component {
     };
   }
 
+  // Button functionality
   startClick = async () => {
-    this.setState({ buttonText: "Running..." });
+    if (this.state.buttonText !== "Clear") {
+      this.setState({ buttonText: "Running..." });
 
-    let response = api.get(
-      "https://ifs1-ifc1.insieme.local/api/class/aaaUser.json",
-      true
-    );
-    response.then(res => {
-      console.log(res.data);
-      this.setState({ resultText: JSON.stringify(res.data, null, 2) });
-    });
-
-    this.setState({ buttonText: "Done!" });
+      let response = Endpoint.api.test();
+      response.then(res => {
+        this.setState({ resultText: JSON.stringify(res, null, 2) });
+      });
+      this.setState({ buttonText: "Clear" });
+    } else {
+      this.setState({ resultText: "" });
+      this.setState({ buttonText: "Start" });
+    }
   };
 
   render() {

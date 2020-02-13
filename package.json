@@ -2,10 +2,14 @@
   "name": "eft",
   "description": "Enhanced Ftriage in React",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.config.dev.js --port 3000"
+    "build-dev": "npm-run-all build-css webpack-development",
+    "build-prod": "npm-run-all build-css webpack-production",
+    "start": "webpack-dev-server --config webpack.config.dev.js --port 3000",
+    "webpack-production": "cross-env NODE_ENV=\"production\" webpack --config webpack.config.dev.js",
+    "webpack-development": "cross-env NODE_ENV=\"development\" webpack --config webpack.config.dev.js",
+    "build-css": "node-sass-chokidar src/ -o src/"
   },
   "dependencies": {
-    "autoprefixer": "^9.7.0",
     "axios": "^0.19.0",
     "bootstrap": "4.3.1",
     "cisco-ui-components": "git+http://wwwin-gitlab-sjc.cisco.com/react/react-cui#1.1.0",
@@ -18,18 +22,16 @@
     "react-dom": "16.8.4",
     "react-router-dom": "5.0.0",
     "react-toastify": "4.5.2",
-    "reselect": "4.0.0"
+    "reselect": "4.0.0",
+    "query-string": "6.11.0"
   },
   "devDependencies": {
     "@babel/core": "7.3.4",
-    "autoprefixer": "9.7.0",
     "babel-eslint": "10.0.1",
     "babel-loader": "8.0.5",
+    "cross-env": "7.0.0",
     "babel-preset-react-app": "7.0.2",
     "css-loader": "2.1.1",
-    "cssnano": "4.1.10",
-    "enzyme": "3.9.0",
-    "enzyme-adapter-react-16": "1.11.2",
     "eslint": "5.15.2",
     "eslint-loader": "2.1.2",
     "eslint-plugin-import": "2.16.0",
@@ -47,7 +49,6 @@
     "postcss-loader": "3.0.0",
     "react-test-renderer": "16.8.4",
     "react-testing-library": "6.0.0",
-    "rimraf": "2.6.3",
     "sass-loader": "8.0.0",
     "style-loader": "0.23.1",
     "webpack": "4.29.6",

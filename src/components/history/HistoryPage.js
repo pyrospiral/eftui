@@ -3,7 +3,7 @@ import React from "react";
 class HistoryPage extends React.Component {
   render() {
     return (
-      <div className="panel panel--loose panel--raised base-margin-bottom">
+      <div className="section">
         <h2>History</h2>
       </div>
     );

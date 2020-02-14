@@ -3,7 +3,9 @@ import PropTypes from "prop-types";
 
 const ResultPane = props => (
   <div className="section">
-    <p>{props.resultText}</p>
+    <div>
+      <pre>{props.resultText}</pre>
+    </div>
   </div>
 );
 

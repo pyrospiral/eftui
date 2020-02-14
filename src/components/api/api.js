@@ -27,6 +27,8 @@ function checkStatus(response) {
         return Promise.reject(new Error(ERR_MSGS.htmlServerError));
       } else if (status === 504) {
         return Promise.reject(new Error(ERR_MSGS.htmlTimeout));
+      } else if (status === 400) {
+        return response;
       }
       return Promise.reject(reason);
     }

@@ -4,7 +4,7 @@
   "scripts": {
     "build-dev": "npm-run-all build-css webpack-development",
     "build-prod": "npm-run-all build-css webpack-production",
-    "start": "webpack-dev-server --config webpack.config.dev.js --port 3000",
+    "start": "webpack-dev-server --config webpack.config.dev.js",
     "webpack-production": "cross-env NODE_ENV=\"production\" webpack --config webpack.config.dev.js",
     "webpack-development": "cross-env NODE_ENV=\"development\" webpack --config webpack.config.dev.js",
     "build-css": "node-sass-chokidar src/ -o src/"

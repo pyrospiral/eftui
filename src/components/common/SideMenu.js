@@ -1,5 +1,6 @@
 import { Sidebar } from "cisco-ui-components";
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 class SideMenu extends React.Component {
   constructor(props) {
@@ -9,32 +10,46 @@ class SideMenu extends React.Component {
   }
 
   render() {
+    const activeStyle = { color: "tertiary" };
     return (
-      <div>
-        <Sidebar
-          title="Sidebar"
-          visible={this.state.visible}
-          activeItem="item1"
-          size="mini"
-          color="indigo"
-        >
-          <a href="javascript:;" id="item1">
-            <span className="icon-home" />
-            <span>Item1</span>
-          </a>
-          <a href="javascript:;" id="item2">
-            Item2
-          </a>
-        </Sidebar>
-        <div className="pull-right">
-          <button
-            className="btn btn--small btn--primary"
-            onClick={() => this.setState({ visible: !this.state.visible })}
+      <Sidebar
+        title="Ftriage"
+        visible={this.state.visible}
+        activeItem="item1"
+        color="indigo"
+      >
+        <div>
+          <NavLink
+            className="header-item"
+            to="/"
+            activeStyle={activeStyle}
+            exact
           >
-            Toggle
-          </button>
+            Home
+          </NavLink>
         </div>
-      </div>
+        <div>
+          <NavLink
+            className="header-item"
+            to="/history"
+            activeStyle={activeStyle}
+            exact
+          >
+            History
+          </NavLink>
+        </div>
+
+        <div>
+          <NavLink
+            className="header-item"
+            to="/help"
+            activeStyle={activeStyle}
+            exact
+          >
+            Help
+          </NavLink>
+        </div>
+      </Sidebar>
     );
   }
 }

@@ -3,11 +3,12 @@ const fs = require("fs");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+// MODE
 process.env.NODE_ENV = "development";
-
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const IS_DEVELOPMENT = !IS_PRODUCTION;
 
+// LOADERS
 let getCSSLoaders = () => {
   const loaders = [];
   loaders.push({
@@ -55,6 +56,7 @@ rules.push({
   ]
 });
 
+// SET CONFIG TO ENV FOR APP TO USE
 const appJson = JSON.parse(fs.readFileSync("./app.json", "utf-8"));
 const devConfig = JSON.parse(fs.readFileSync("./devConfig.json", "utf-8"));
 // With production code, the app runs on APIC itself as an appCenter app.
@@ -70,7 +72,7 @@ let env = {
     VERSION: appJson.version
   },
   endpointConfig: {
-    BASE_URI: "/appcenter/Cisco/" + appJson.appid + "/", // for backend query
+    BASE_URI: "/appcenter/Cisco/" + appJson.appid, // for backend query
     BASE_NATIVE_URI: "/api" // for apic query
   }
 };
@@ -78,7 +80,7 @@ if (IS_DEVELOPMENT) {
   env = {
     ...env,
     endpointConfig: {
-      BASE_URI: "/appcenter/Cisco/" + appJson.appid + "/", // for backend query
+      BASE_URI: "/appcenter/Cisco/" + appJson.appid, // for backend query
       BASE_NATIVE_URI: "/api", // for apic query
       USERNAME: devConfig.apic.username,
       PASSWORD: devConfig.apic.password
@@ -93,6 +95,14 @@ fs.writeFileSync(
   { flag: "w+" }
 );
 
+// RESOLVE
+const resolve = {
+  extensions: [".js", ".jsx"],
+  modules: [path.resolve(__dirname), "node_modules", "bower_components"],
+  symlinks: false // This is required from webpack to exclude linked modules together with node_modules (e.g. eslint won't analyse these modules)
+};
+
+// DEV SERVER
 const proxyConfig = {
   changeOrigin: true,
   secure: false,
@@ -102,34 +112,14 @@ const proxyConfig = {
 const devServer = {
   port: 8080,
   hot: true,
-  open: true, // open browser
   historyApiFallback: true,
   proxy: {
     [env.endpointConfig.BASE_URI]: Object.assign({}, proxyConfig, {
-      target:
-        devConfig.backend.prot +
-        devConfig.backend.ip +
-        ":" +
-        devConfig.backend.port
+      target: devConfig.backend.prot + devConfig.backend.ip
     }),
     [env.endpointConfig.BASE_NATIVE_URI]: Object.assign({}, proxyConfig, {
       target: devConfig.apic.prot + devConfig.apic.ip
     })
-  }
-};
-
-const devServer2 = {
-  stats: "minimal",
-  overlay: true,
-  historyApiFallback: true,
-  disableHostCheck: true,
-  port: 8000,
-  https: false,
-  headers: {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-    "Access-Control-Allow-Headers":
-      "X-Requested-With, content-type, Authorization"
   }
 };
 
@@ -141,7 +131,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "build"),
     publicPath: "/",
-    filename: "bundle.js"
+    filename: "index.js"
   },
   devServer,
   plugins: [
@@ -154,6 +144,7 @@ module.exports = {
       chunkFilename: "[id].css"
     })
   ],
+  resolve,
   module: {
     rules
   }

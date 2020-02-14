@@ -42,11 +42,33 @@ class AppApiImpl extends AbstractClass(AppApi, []) {
   }
 
   get(path, params) {
-    return this._get(ENV.endpointConfig.BASE_URI, path, params);
+    const self = this,
+      promise = new Promise(function(resolve) {
+        return self.APICProxyAuth().then(() => {
+          return self
+            ._get(ENV.endpointConfig.BASE_URI, path, params)
+            .then(response => {
+              resolve(response);
+            });
+        });
+      });
+
+    return promise;
   }
 
   post(path, payload) {
-    return this._post(ENV.endpointConfig.BASE_URI, path, payload);
+    const self = this,
+      promise = new Promise(function(resolve) {
+        return self.APICProxyAuth().then(() => {
+          return self
+            ._post(ENV.endpointConfig.BASE_URI, path, payload)
+            .then(response => {
+              resolve(response);
+            });
+        });
+      });
+
+    return promise;
   }
 
   getNative(path, params) {
@@ -128,7 +150,7 @@ class AppApiImpl extends AbstractClass(AppApi, []) {
           return token;
         })
         .catch(err => {
-          console.log("hiii" + err);
+          console.log(err);
         });
     }
 
@@ -162,21 +184,22 @@ class HttpAppApi extends AppApiImpl {
     });
   };
 
-  test = () => {
-    return this.getNative("/node/class/aaaUser");
+  test = flowval => {
+    console.log(flowval);
+    return this.get("api/misc/help");
+  };
+
+  register = payload => {
+    return this.post("api/client/register", payload);
+  };
+
+  start = payload => {
+    return this.post("api/base/start", payload);
   };
 }
 
 let httpApi;
-/**
- * Expose the Endpoint API via a proxy which controls the 'api' property.
- *
- * @example
- *
- * Endpoint.api.queuesTopNodes().then(response => { ... })
- *
- * @type {Proxy}
- */
+
 let Endpoint = new Proxy(
   {
     mock: false,

@@ -196,6 +196,14 @@ class HttpAppApi extends AppApiImpl {
   start = payload => {
     return this.post("api/base/start", payload);
   };
+
+  status = payload => {
+    return this.post("api/base/status", payload);
+  };
+
+  result = payload => {
+    return this.post("api/base/result", payload);
+  };
 }
 
 let httpApi;

@@ -15,10 +15,10 @@ function checkStatus(response) {
   const status = response.status;
   return response.json().then(
     json => {
-      if (response.ok) {
-        return json;
+      if (!response.ok) {
+        console.log("ERROR");
       }
-      return Promise.reject(json);
+      return json;
     },
     reason => {
       if (status === 204) {

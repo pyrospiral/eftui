@@ -204,6 +204,14 @@ class HttpAppApi extends AppApiImpl {
   result = payload => {
     return this.post("api/base/result", payload);
   };
+
+  abort = payload => {
+    return this.post("api/base/cancel", payload);
+  };
+
+  tasks = () => {
+    return this.get("api/base/tasks");
+  };
 }
 
 let httpApi;

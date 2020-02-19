@@ -9,6 +9,10 @@ class SideMenu extends React.Component {
     this.state = { visible: true };
   }
 
+  componentDidMount() {
+    console.log("Search for sites");
+  }
+
   render() {
     const activeStyle = { color: "tertiary" };
     return (
@@ -36,6 +40,17 @@ class SideMenu extends React.Component {
             exact
           >
             History
+          </NavLink>
+        </div>
+
+        <div>
+          <NavLink
+            className="header-item"
+            to="/sites"
+            activeStyle={activeStyle}
+            exact
+          >
+            Sites
           </NavLink>
         </div>
 

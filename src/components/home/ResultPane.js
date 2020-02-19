@@ -2,12 +2,19 @@ import React from "react";
 import PropTypes from "prop-types";
 import Endpoint from "../api/endpoint";
 
+import { Steps, Toast } from "cisco-ui-components";
+
 class ResultPane extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       response: "",
-      ft_token: null
+      ft_token: null,
+      stepStarted: "inactive",
+      stepRunning: "inactive",
+      stepCompleted: "inactive",
+      stepResult: "inactive",
+      warningToast: null
     };
   }
 
@@ -15,8 +22,24 @@ class ResultPane extends React.Component {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
   };
 
+  flowToPayload(flowstr) {
+    let flowarray = flowstr.split(" ");
+    let payload = {
+      flow: flowarray[1]
+    };
+    for (var i = 2; i < flowarray.length; i = i + 2) {
+      payload[flowarray[i].slice(1)] = flowarray[i + 1];
+    }
+    return payload;
+  }
+
   statusCheck(ft_token) {
+    if (ft_token == null || ft_token === "") {
+      return;
+    }
+
     // Payload for status request
+
     let payload = {
       ft_token: ft_token
     };
@@ -25,14 +48,16 @@ class ResultPane extends React.Component {
     let response = Endpoint.api.status(payload);
     response.then(res => {
       this.setState({
-        response: JSON.stringify(res, null, 2)
+        response: JSON.stringify(res, null, 2),
+        stepRunning: "active"
       });
 
       console.log(res);
       // If fttoken is invalid
-      if (res.message && res.message.includes("Invalid")) {
+      if (res.error) {
         this.setState({
-          response: "Errored. Start a new request."
+          response: res.error,
+          warningToast: "Invalid ft_token"
         });
         return;
       }
@@ -44,8 +69,19 @@ class ResultPane extends React.Component {
         });
       }
 
+      // If failed
+      else if (res.status && res.status.includes("FAILURE")) {
+        this.setState({
+          warningToast: "Request Failed."
+        });
+      }
+
       // If succeeds
-      if (res.status && res.status.includes("SUCCESS")) {
+      else if (res.status && res.status.includes("SUCCESS")) {
+        this.setState({
+          stepRunning: "visited",
+          stepCompleted: "active"
+        });
         this.getResult(ft_token);
       }
     });
@@ -64,40 +100,53 @@ class ResultPane extends React.Component {
         response: JSON.stringify(res, null, 2)
       });
 
-      console.log(res);
+      this.setState({
+        stepCompleted: "visited",
+        stepResult: "active"
+      });
+
       // If fttoken is invalid
-      if (res.message && res.message.includes("Invalid")) {
+      if (res.error) {
         this.setState({
-          response: "Errored. Start a new request."
+          response: res.error,
+          warningToast: "Error in getting result."
         });
         return;
-      }
-
-      // If succeeds
-      if (res.status && res.status.includes("SUCCESS")) {
-        this.getResult(ft_token);
       }
     });
   }
 
+  // Start ftriage here
   componentDidUpdate(previousProps) {
     // Break condition - Do not rerender if props stay the same
-    if (previousProps == this.props) {
+    if (previousProps.flowid == this.props.flowid) {
       return;
     }
+    this.setState({
+      stepStarted: "active",
+      stepRunning: "inactive",
+      stepCompleted: "inactive",
+      stepResult: "inactive",
+      warningToast: null
+    });
 
-    let payload = {
-      flow: "route",
-      ii: "LEAF:101",
-      dip: "102.13.12.10"
-    };
+    let payload = this.flowToPayload(this.props.flow);
     let response = Endpoint.api.start(payload);
 
     response.then(res => {
       this.setState({
         response: JSON.stringify(res, null, 2),
-        ft_token: res.ft_token
+        ft_token: res.ft_token,
+        stepStarted: "visited"
       });
+
+      if (res.message && res.message.includes("Error")) {
+        this.setState({
+          response: "Errored. Start a new request.",
+          warningToast: "Error in starting, check logs!"
+        });
+      }
+
       this.statusCheck(res.ft_token);
     });
   }
@@ -107,10 +156,39 @@ class ResultPane extends React.Component {
       <div className="section">
         {this.props.flow !== "" && (
           <>
-            <div>Query : {this.props.flow}</div>
-            <div>JSON Result : {this.state.response}</div>
-            <div>Token Received : {this.state.ft_token}</div>
+            <div className="panel panel--loose panel--raised base-margin-bottom">
+              <b>{this.props.flow}</b>
+              <hr />
+              <pre>{this.state.response}</pre>
+              <br />
+              <div>Token Received : {this.state.ft_token}</div>
+              <Steps>
+                <Steps.Step
+                  state={this.state.stepStarted}
+                  icon="1"
+                  label="Started"
+                />
+                <Steps.Step
+                  state={this.state.stepRunning}
+                  icon="2"
+                  label="Running"
+                />
+                <Steps.Step
+                  state={this.state.stepCompleted}
+                  icon="3"
+                  label="Completed"
+                />
+                <Steps.Step
+                  state={this.state.stepResult}
+                  icon="4"
+                  label="Parsed"
+                />
+              </Steps>
+            </div>
           </>
+        )}
+        {this.state.warningToast && (
+          <Toast sev="danger" title="Error" message={this.state.warningToast} />
         )}
       </div>
     );

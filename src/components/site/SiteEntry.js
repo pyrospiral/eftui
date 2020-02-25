@@ -23,8 +23,7 @@ class SiteEntry extends React.Component {
           host: this.state.hostname,
           username: this.state.username,
           password: this.state.password,
-          site: this.state.siteid,
-          islocal: "false"
+          site: this.state.siteid
         }
       ]
     };

@@ -9,6 +9,7 @@ class HomePage extends React.Component {
     this.state = {
       buttonText: "Start",
       flowval: "ftriage route -ii LEAF:101 -dip 101.46.2.2",
+      multisite: false,
       flow: "",
       flowid: 0
     };
@@ -35,16 +36,28 @@ class HomePage extends React.Component {
   flowChange = event => {
     this.setState({ flowval: event.target.value });
   };
+  multisiteChange = event => {
+    this.setState({ multisite: event.target.checked });
+  };
 
   render() {
     return (
       <div className="section">
-        <FlowEntry flowval={this.state.flowval} flowChange={this.flowChange} />
+        <FlowEntry
+          flowval={this.state.flowval}
+          flowChange={this.flowChange}
+          multisite={this.state.multisite}
+          multisiteChange={this.multisiteChange}
+        />
         <StartButton
           onClick={this.startClick}
           buttonText={this.state.buttonText}
         />
-        <ResultPane flow={this.state.flow} flowid={this.state.flowid} />
+        <ResultPane
+          flow={this.state.flow}
+          flowid={this.state.flowid}
+          multisite={this.state.multisite}
+        />
       </div>
     );
   }

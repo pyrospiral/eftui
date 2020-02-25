@@ -22,10 +22,11 @@ class ResultPane extends React.Component {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
   };
 
-  flowToPayload(flowstr) {
+  flowToPayload(flowstr, multisite) {
     let flowarray = flowstr.split(" ");
     let payload = {
-      flow: flowarray[1]
+      flow: flowarray[1],
+      is_multi: multisite
     };
     for (var i = 2; i < flowarray.length; i = i + 2) {
       payload[flowarray[i].slice(1)] = flowarray[i + 1];
@@ -130,7 +131,7 @@ class ResultPane extends React.Component {
       warningToast: null
     });
 
-    let payload = this.flowToPayload(this.props.flow);
+    let payload = this.flowToPayload(this.props.flow, this.props.multisite);
     let response = Endpoint.api.start(payload);
 
     response.then(res => {
@@ -197,7 +198,8 @@ class ResultPane extends React.Component {
 
 ResultPane.propTypes = {
   flow: PropTypes.string,
-  flowid: PropTypes.number
+  flowid: PropTypes.number,
+  multisite: PropTypes.bool
 };
 
 export default ResultPane;

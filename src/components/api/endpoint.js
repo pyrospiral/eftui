@@ -165,18 +165,6 @@ class HttpAppApi extends AppApiImpl {
     return this.getNative(`${APIC_PATHS.CLASS}/${aciClass}`, params);
   };
 
-  fetchTopSystems = () => {
-    const queryTargetFilter =
-      'query-target-filter=ne(topSystem.role,"controller")';
-    const rspSubtreeFull = "rsp-subtree=full";
-    const rspSubtreeClass =
-      "rsp-subtree-class=eqptFC,eqptLPort,firmwareRunning";
-    return this.getApicClass(
-      APIC_API.CLASSES.TOP_SYSTEM,
-      `${queryTargetFilter}&${rspSubtreeFull}&${rspSubtreeClass}`
-    );
-  };
-
   loginCheck = (_username, _password) => {
     return this.post("loginCheck", {
       username: _username,
@@ -186,31 +174,35 @@ class HttpAppApi extends AppApiImpl {
 
   test = flowval => {
     console.log(flowval);
-    return this.get("api/misc/help");
+    return this.get("misc/help");
   };
 
   register = payload => {
-    return this.post("api/client/register", payload);
+    return this.post("client/register", payload);
   };
 
   start = payload => {
-    return this.post("api/base/start", payload);
+    return this.post("base/start", payload);
   };
 
   status = payload => {
-    return this.post("api/base/status", payload);
+    return this.post("base/status", payload);
   };
 
   result = payload => {
-    return this.post("api/base/result", payload);
+    return this.post("base/result", payload);
   };
 
   abort = payload => {
-    return this.post("api/base/cancel", payload);
+    return this.post("base/cancel", payload);
   };
 
   tasks = () => {
-    return this.get("api/base/tasks");
+    return this.get("base/tasks");
+  };
+
+  sites = () => {
+    return this.get("client/sites");
   };
 }
 

@@ -4,9 +4,9 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 // MODE
-process.env.NODE_ENV = "development";
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const IS_DEVELOPMENT = !IS_PRODUCTION;
+process.env.BABEL_ENV = "development";
 
 // LOADERS
 let getCSSLoaders = () => {
@@ -72,7 +72,7 @@ let env = {
     VERSION: appJson.version
   },
   endpointConfig: {
-    BASE_URI: "/appcenter/Cisco/" + appJson.appid, // for backend query
+    BASE_URI: "/appcenter/Cisco/" + appJson.appid + "/api", // for backend query
     BASE_NATIVE_URI: "/api" // for apic query
   }
 };
@@ -80,8 +80,8 @@ if (IS_DEVELOPMENT) {
   env = {
     ...env,
     endpointConfig: {
-      BASE_URI: "/appcenter/Cisco/" + appJson.appid, // for backend query
-      BASE_NATIVE_URI: "/api", // for apic query
+      BASE_URI: "/api", // for backend query
+      BASE_NATIVE_URI: "/apicproxy", // for apic query
       USERNAME: devConfig.apic.username,
       PASSWORD: devConfig.apic.password
     }
@@ -115,7 +115,11 @@ const devServer = {
   historyApiFallback: true,
   proxy: {
     [env.endpointConfig.BASE_URI]: Object.assign({}, proxyConfig, {
-      target: devConfig.backend.prot + devConfig.backend.ip
+      target:
+        devConfig.backend.prot +
+        devConfig.backend.ip +
+        ":" +
+        devConfig.backend.port
     }),
     [env.endpointConfig.BASE_NATIVE_URI]: Object.assign({}, proxyConfig, {
       target: devConfig.apic.prot + devConfig.apic.ip
@@ -124,7 +128,7 @@ const devServer = {
 };
 
 module.exports = {
-  mode: "development",
+  mode: process.env.NODE_ENV,
   target: "web",
   devtool: "cheap-module-source-map",
   entry: "./src/index",

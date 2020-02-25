@@ -22,7 +22,7 @@ class HistoryPage extends React.Component {
       // console.log(res);
       let joined = this.state.flows;
       let counter = 0;
-      for (const [key, value] of Object.entries(res.message)) {
+      for (const [key, value] of Object.entries(res.reply)) {
         if (value.token == null) {
           return;
         }

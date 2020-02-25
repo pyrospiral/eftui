@@ -26,12 +26,23 @@ class SiteItem extends React.Component {
   render() {
     return (
       <div className="panel panel--loose panel--raised base-margin-bottom">
-        <div className="base-margin-top">
-          <p>{this.state.ip}</p>
-          <p>{this.state.siteid}</p>
-          <p>{this.state.host}</p>
-          <p>{this.state.username}</p>
-          <p>{this.state.islocal}</p>
+        <div className="base-margin-top row">
+          <div className="col-2 col-lg-2 col-xl-2">
+            <div className="subheader">Site ID</div>
+            <span className="label label--info">{this.state.siteid}</span>
+          </div>
+          <div className="col-2 col-lg-2 col-xl-2">
+            <div className="subheader">Address</div>
+            <p>{this.state.ip}</p>
+          </div>
+          <div className="col-2 col-lg-2 col-xl-2">
+            <div className="subheader">Hostname</div>
+            <p>{this.state.host}</p>
+          </div>
+          <div className="col-2 col-lg-2 col-xl-2">
+            <div className="subheader">Username</div>
+            <p>{this.state.username}</p>
+          </div>
         </div>
       </div>
     );
@@ -42,6 +53,6 @@ SiteItem.propTypes = {
   siteid: PropTypes.string,
   host: PropTypes.string,
   username: PropTypes.string,
-  islocal: PropTypes.string
+  islocal: PropTypes.bool
 };
 export default SiteItem;

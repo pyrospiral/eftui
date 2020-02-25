@@ -68,7 +68,6 @@ class SitePage extends React.Component {
 
     const loader = (
       <>
-        <SiteEntry siteval={this.state.siteval} siteChange={this.siteChange} />
         <div className="row">
           <div className="col-md-12 flex-center panel">
             <p>Ftriage sites registered in the past will show up here.</p>
@@ -83,6 +82,11 @@ class SitePage extends React.Component {
         <div className="section">
           <h2>Sites</h2>
           <hr />
+
+          <SiteEntry
+            siteval={this.state.siteval}
+            siteChange={this.siteChange}
+          />
           {this.state.sitenum > 0 ? siteItems : loader}
         </div>
       </div>

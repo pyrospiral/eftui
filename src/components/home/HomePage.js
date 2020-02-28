@@ -8,7 +8,7 @@ class HomePage extends React.Component {
     super(props);
     this.state = {
       buttonText: "Start",
-      flowval: "ftriage route -ii LEAF:101 -dip 101.46.2.2",
+      flowval: "ftriage route -ii LEAF:401 -dip 101.1.2.51",
       multisite: false,
       flow: "",
       flowid: 0

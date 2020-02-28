@@ -35,6 +35,12 @@ function checkStatus(response) {
   );
 }
 
+function getStream(response) {
+  // resolve a reader for this method and loop on it
+  const reader = response.body.getReader();
+  return Promise.resolve(reader);
+}
+
 const getBaseOptions = url => {
   // Get ACI tokens from cookies
   const tokenKeyPrefix = "app_Cisco_" + ENV.appConfig.APP_ID;
@@ -93,6 +99,18 @@ const api = {
     try {
       const response = await fetch(url, options);
       return checkStatus(response);
+    } catch (error) {
+      return await Promise.reject(error);
+    }
+  },
+  async poststream(url, payload) {
+    const options = Object.assign({}, getBaseOptions(url), {
+      method: POST,
+      body: JSON.stringify(payload)
+    });
+    try {
+      const response = await fetch(url, options);
+      return getStream(response);
     } catch (error) {
       return await Promise.reject(error);
     }

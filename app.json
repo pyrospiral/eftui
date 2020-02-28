@@ -1,15 +1,19 @@
 {
   "api": {
-    "api/base/result.json": "Result of ftriage on apic",
-    "api/base/status.json": "Status of ftriage on apic",
-    "api/base/start.json": "Start ftriage on apic",
     "api/base/cancel.json": "Abort ftriage task",
+    "api/base/result.json": "Result of ftriage on apic",
+    "api/base/logstream.json": "Stream of ftriage log on app",
+    "api/base/start.json": "Start ftriage on apic",
+    "api/base/status.json": "Status of ftriage on apic",
+    "api/base/statusstream.json": "Stream of Status of ftriage on app",
+    "api/base/tasks.json": "List of ftriage tasks",
     "api/client/register.json": "Register sites on apic",
+    "api/client/sites.json": "Get sites on app",
     "api/client/update_msite.json": "Updates MSO IP address",
-    "api/misc/help.json": "Test client interaction",
-    "api/dev/log.json": "Get app logs",
     "api/dev/health.json": "Get app health",
-    "api/dev/restart.json": "Restart the webserver"
+    "api/dev/log.json": "Get app logs",
+    "api/dev/restart.json": "Restart the webserver",
+    "api/misc/help.json": "Test client interaction"
   },
   "apicversion": "4.1(2m)",
   "appid": "enhancedftriage",

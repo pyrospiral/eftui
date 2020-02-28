@@ -21,7 +21,6 @@ class FlowItem extends React.Component {
   };
 
   abortTask = () => {
-    console.log("Getting result for");
     let payload = {
       ft_token: this.state.token
     };

@@ -37,6 +37,10 @@ class AppApiImpl extends AbstractClass(AppApi, []) {
     return api.post(`${baseUri}/${path}.${EXT}`, payload);
   }
 
+  _poststream(baseUri, path, payload) {
+    return api.poststream(`${baseUri}/${path}.${EXT}`, payload);
+  }
+
   _remove(baseUri, path) {
     return api.remove(`${baseUri}/${path}.${EXT}`);
   }
@@ -56,15 +60,22 @@ class AppApiImpl extends AbstractClass(AppApi, []) {
     return promise;
   }
 
-  post(path, payload) {
+  post(path, payload, isstream) {
     const self = this,
       promise = new Promise(function(resolve) {
         return self.APICProxyAuth().then(() => {
-          return self
-            ._post(ENV.endpointConfig.BASE_URI, path, payload)
-            .then(response => {
-              resolve(response);
-            });
+          if (isstream) {
+            return self
+              ._poststream(ENV.endpointConfig.BASE_URI, path, payload)
+              .then(response => {
+                resolve(response);
+              });
+          } else
+            return self
+              ._post(ENV.endpointConfig.BASE_URI, path, payload)
+              .then(response => {
+                resolve(response);
+              });
         });
       });
 
@@ -189,8 +200,16 @@ class HttpAppApi extends AppApiImpl {
     return this.post("base/status", payload);
   };
 
+  statusstream = payload => {
+    return this.post("base/statusstream", payload, true);
+  };
+
   result = payload => {
     return this.post("base/result", payload);
+  };
+
+  logstream = payload => {
+    return this.post("base/logstream", payload, true);
   };
 
   abort = payload => {

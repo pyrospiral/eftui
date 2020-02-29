@@ -24,6 +24,11 @@ const FlowEntry = props => {
             <select id="type">
               <option value="first">Route</option>
               <option value="second">Bridge</option>
+              <option value="second">Gwping</option>
+              <option value="second">Gwarp</option>
+              <option value="second">Infraping</option>
+              <option value="second">Arp</option>
+              <option value="second">Mpls</option>
             </select>
             <label htmlFor="type">Flow Presets</label>
           </div>

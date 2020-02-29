@@ -35,6 +35,15 @@ function checkStatus(response) {
   );
 }
 
+function checkStatusText(response) {
+  return response.text().then(text => {
+    if (!response.ok) {
+      console.log("ERROR");
+    }
+    return text;
+  });
+}
+
 function getStream(response) {
   // resolve a reader for this method and loop on it
   const reader = response.body.getReader();
@@ -50,7 +59,7 @@ const getBaseOptions = url => {
   const apicCookie = Cookies.get(APIC_COOKIE_NAME);
 
   let headers = {
-    Accept: "application/json",
+    Accept: "*/*",
     "Content-Type": "application/json"
   };
 
@@ -99,6 +108,18 @@ const api = {
     try {
       const response = await fetch(url, options);
       return checkStatus(response);
+    } catch (error) {
+      return await Promise.reject(error);
+    }
+  },
+  async postfortext(url, payload) {
+    const options = Object.assign({}, getBaseOptions(url), {
+      method: POST,
+      body: JSON.stringify(payload)
+    });
+    try {
+      const response = await fetch(url, options);
+      return checkStatusText(response);
     } catch (error) {
       return await Promise.reject(error);
     }

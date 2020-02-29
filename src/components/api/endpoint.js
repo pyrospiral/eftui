@@ -1,5 +1,5 @@
 /*
-Taken from Elam Assitant by Takuya
+Based on Elam Assitant by Takuya
 */
 
 import queryString from "query-string";
@@ -41,6 +41,10 @@ class AppApiImpl extends AbstractClass(AppApi, []) {
     return api.poststream(`${baseUri}/${path}.${EXT}`, payload);
   }
 
+  _postfortext(baseUri, path, payload) {
+    return api.postfortext(`${baseUri}/${path}.${EXT}`, payload);
+  }
+
   _remove(baseUri, path) {
     return api.remove(`${baseUri}/${path}.${EXT}`);
   }
@@ -60,13 +64,19 @@ class AppApiImpl extends AbstractClass(AppApi, []) {
     return promise;
   }
 
-  post(path, payload, isstream) {
+  post(path, payload, isstream, isfortext) {
     const self = this,
       promise = new Promise(function(resolve) {
         return self.APICProxyAuth().then(() => {
           if (isstream) {
             return self
               ._poststream(ENV.endpointConfig.BASE_URI, path, payload)
+              .then(response => {
+                resolve(response);
+              });
+          } else if (isfortext) {
+            return self
+              ._postfortext(ENV.endpointConfig.BASE_URI, path, payload)
               .then(response => {
                 resolve(response);
               });
@@ -206,6 +216,10 @@ class HttpAppApi extends AppApiImpl {
 
   result = payload => {
     return this.post("base/result", payload);
+  };
+
+  logs = payload => {
+    return this.post("base/log", payload, false, true);
   };
 
   logstream = payload => {

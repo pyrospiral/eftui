@@ -27,9 +27,16 @@ class HistoryPage extends React.Component {
           return;
         }
 
+        // Change command to remove extra details
+        let newcmd = value.cmd.split(" ");
+        newcmd = newcmd.slice(5);
+        newcmd = newcmd.join(" ");
+
         let newState = {
           token: value.token,
           status: value.status,
+          cmd: newcmd,
+          date: value.date,
           id: key
         };
         joined = joined.concat(newState);
@@ -48,7 +55,13 @@ class HistoryPage extends React.Component {
 
   render() {
     const flowItems = this.state.flows.map(item => (
-      <FlowItem key={item.id} token={item.token} status={item.status} />
+      <FlowItem
+        key={item.id}
+        token={item.token}
+        status={item.status}
+        cmd={item.cmd}
+        date={item.date}
+      />
     ));
 
     const loader = (

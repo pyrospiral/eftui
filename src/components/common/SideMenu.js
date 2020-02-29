@@ -20,7 +20,7 @@ class SideMenu extends React.Component {
         title="Ftriage"
         visible={this.state.visible}
         activeItem="item1"
-        color="indigo"
+        color="secondary"
       >
         <div>
           <NavLink

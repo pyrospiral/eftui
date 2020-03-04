@@ -1,12 +1,12 @@
 {
   "backend": {
     "prot": "https://",
-    "ip": "0.0.0.0",
-    "port": "12321"
+    "ip": "swsr1-ifc1.insieme.local",
+    "port": ""
   },
   "apic": {
     "prot": "https://",
-    "ip": "ifs1-ifc1.insieme.local",
+    "ip": "swsr1-ifc1.insieme.local",
     "username": "admin",
     "password": "ins3965!"
   }

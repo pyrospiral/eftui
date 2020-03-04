@@ -67,121 +67,195 @@ class ResultPane extends React.Component {
         });
       }
 
-      this.statusCheck(res.ft_token);
+      //this.statusCheck(res.ft_token);
+      this.pollStatusCheck(res.ft_token);
     });
   }
 
-  statusCheck(ft_token) {
+  pollStatusCheck(ft_token) {
     if (ft_token == null || ft_token === "") {
       return;
     }
 
     // Payload for status request
+
     let payload = {
       ft_token: ft_token
     };
 
-    // Status stream request
-    let response = Endpoint.api.statusstream(payload);
-    response.then(reader => {
-      this.parseStatusReader(reader, ft_token);
+    // Status request
+    let response = Endpoint.api.status(payload);
+    response.then(res => {
       this.setState({
+        response: JSON.stringify(res, null, 2),
+        stepRunning: "active"
+      });
+
+      // If fttoken is invalid
+      if (res.error) {
+        this.setState({
+          response: res.error,
+          warningToast: "Invalid ft_token"
+        });
+        return;
+      }
+
+      // If not succeeded yet
+      if (res.status && res.status.includes("PENDING")) {
+        this.sleep(5000).then(() => {
+          this.pollStatusCheck(ft_token);
+        });
+        this.pollLog(ft_token);
+      }
+
+      // If failed
+      else if (res.status && res.status.includes("FAILURE")) {
+        this.setState({
+          warningToast: "Request Failed."
+        });
+      }
+
+      // If succeeds
+      else if (res.status && res.status.includes("SUCCESS")) {
+        this.setState({
+          stepRunning: "visited",
+          stepCompleted: "active"
+        });
+        this.getResult(ft_token);
+      }
+    });
+  }
+
+  pollLog(ft_token) {
+    console.log("getting logs");
+
+    let payload = {
+      ft_token: ft_token,
+      lines: 10
+    };
+
+    // Status request
+    let response = Endpoint.api.logs(payload);
+    response.then(res => {
+      this.setState({
+        ftresult: this.parseLog(res),
         stepRunning: "active"
       });
     });
   }
 
-  async parseStatusReader(reader, ft_token) {
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      const { done, value } = await reader.read();
+  // Removing to avoid using sse
+  // statusCheck(ft_token) {
+  //   if (ft_token == null || ft_token === "") {
+  //     return;
+  //   }
 
-      if (done) {
-        break;
-      }
-      let result = new TextDecoder("utf-8").decode(value);
-      let resultObject = JSON.parse(result);
-      this.setState({
-        response: "Status: " + resultObject.status
-      });
+  //   // Payload for status request
+  //   let payload = {
+  //     ft_token: ft_token
+  //   };
 
-      // If fttoken is invalid
-      if (resultObject.error) {
-        this.setState({
-          response: resultObject.error,
-          warningToast: "Invalid ft_token"
-        });
-        break;
-      }
+  //   // Status stream request
+  //   let response = Endpoint.api.statusstream(payload);
+  //   response.then(reader => {
+  //     this.parseStatusReader(reader, ft_token);
+  //     this.setState({
+  //       stepRunning: "active"
+  //     });
+  //   });
+  // }
 
-      // If failed
-      else if (resultObject.status && resultObject.status.includes("FAILURE")) {
-        this.setState({
-          warningToast: "Request Failed."
-        });
-        break;
-      }
+  // async parseStatusReader(reader, ft_token) {
+  //   // eslint-disable-next-line no-constant-condition
+  //   while (true) {
+  //     const { done, value } = await reader.read();
 
-      // If pending - start logging
-      else if (resultObject.status && resultObject.status.includes("PENDING")) {
-        if (!this.state.gettinglogs) {
-          this.getLog(ft_token);
-        }
-        continue;
-      }
+  //     if (done) {
+  //       break;
+  //     }
+  //     let result = new TextDecoder("utf-8").decode(value);
+  //     let resultObject = JSON.parse(result);
+  //     this.setState({
+  //       response: "Status: " + resultObject.status
+  //     });
 
-      // If succeeds - get result
-      else if (resultObject.status && resultObject.status.includes("SUCCESS")) {
-        this.setState({
-          stepRunning: "visited",
-          stepCompleted: "active",
-          gettinglogs: false
-        });
-        this.getResult(ft_token);
-        break;
-      }
-    }
-  }
+  //     // If fttoken is invalid
+  //     if (resultObject.error) {
+  //       this.setState({
+  //         response: resultObject.error,
+  //         warningToast: "Invalid ft_token"
+  //       });
+  //       break;
+  //     }
 
-  getLog(ft_token) {
-    // Payload for result request
-    let payload = {
-      ft_token: ft_token
-    };
+  //     // If failed
+  //     else if (resultObject.status && resultObject.status.includes("FAILURE")) {
+  //       this.setState({
+  //         warningToast: "Request Failed."
+  //       });
+  //       break;
+  //     }
 
-    // Status stream request
-    this.setState({
-      gettinglogs: true
-    });
-    let response = Endpoint.api.logstream(payload);
-    response.then(reader => {
-      this.parseLogReader(reader, ft_token);
-    });
-  }
+  //     // If pending - start logging
+  //     else if (resultObject.status && resultObject.status.includes("PENDING")) {
+  //       if (!this.state.gettinglogs) {
+  //         this.getLog(ft_token);
+  //       }
+  //       continue;
+  //     }
 
-  async parseLogReader(reader) {
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      const { done, value } = await reader.read();
+  //     // If succeeds - get result
+  //     else if (resultObject.status && resultObject.status.includes("SUCCESS")) {
+  //       this.setState({
+  //         stepRunning: "visited",
+  //         stepCompleted: "active",
+  //         gettinglogs: false
+  //       });
+  //       this.getResult(ft_token);
+  //       break;
+  //     }
+  //   }
+  // }
 
-      if (done) {
-        break;
-      }
-      let result = new TextDecoder("utf-8").decode(value);
-      result = this.parseLog(result);
-      if (!result) {
-        continue;
-      }
-      this.setState({
-        ftresult: result
-      });
-    }
-  }
+  // getLog(ft_token) {
+  //   // Payload for result request
+  //   let payload = {
+  //     ft_token: ft_token
+  //   };
+
+  //   // Status stream request
+  //   this.setState({
+  //     gettinglogs: true
+  //   });
+  //   let response = Endpoint.api.logstream(payload);
+  //   response.then(reader => {
+  //     this.parseLogReader(reader, ft_token);
+  //   });
+  // }
+
+  // async parseLogReader(reader) {
+  //   // eslint-disable-next-line no-constant-condition
+  //   while (true) {
+  //     const { done, value } = await reader.read();
+
+  //     if (done) {
+  //       break;
+  //     }
+  //     let result = new TextDecoder("utf-8").decode(value);
+  //     result = this.parseLog(result);
+  //     if (!result) {
+  //       continue;
+  //     }
+  //     this.setState({
+  //       ftresult: result
+  //     });
+  //   }
+  // }
 
   parseLog(logstring) {
     try {
       let logobject = JSON.parse(logstring);
-      return logobject.log;
+      return logobject.reply;
     } catch {
       return null;
     }

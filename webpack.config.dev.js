@@ -80,8 +80,8 @@ if (IS_DEVELOPMENT) {
   env = {
     ...env,
     endpointConfig: {
-      BASE_URI: "/api", // for backend query
-      BASE_NATIVE_URI: "/apicproxy", // for apic query
+      BASE_URI: "/appcenter/Cisco/" + appJson.appid + "/api", // for backend query
+      BASE_NATIVE_URI: "/api", // for apic query
       USERNAME: devConfig.apic.username,
       PASSWORD: devConfig.apic.password
     }
@@ -116,10 +116,7 @@ const devServer = {
   proxy: {
     [env.endpointConfig.BASE_URI]: Object.assign({}, proxyConfig, {
       target:
-        devConfig.backend.prot +
-        devConfig.backend.ip +
-        ":" +
-        devConfig.backend.port
+        devConfig.backend.prot + devConfig.backend.ip + devConfig.backend.port
     }),
     [env.endpointConfig.BASE_NATIVE_URI]: Object.assign({}, proxyConfig, {
       target: devConfig.apic.prot + devConfig.apic.ip
